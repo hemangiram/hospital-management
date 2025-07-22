@@ -13,26 +13,18 @@ ROLE_CHOICES = [
 
 
 
-DEPARTMENTS = [
-    ('Cardiology', 'Cardiology'),
-    ('Neurology', 'Neurology'),
-    ('Orthopedics', 'Orthopedics'),
-]
-
-DOCTORS = [
-    ('Dr. Smith', 'Dr. Smith'),
-    ('Dr. Patel', 'Dr. Patel'),
-    ('Dr. Khan', 'Dr. Khan'),
-]
 
 class Doctor(models.Model):
-        user = models.OneToOneField(User, on_delete=models.CASCADE)
-        department = models.CharField(max_length=100, choices=DEPARTMENTS)
+        name = models.CharField(max_length=100)
+        department = models.CharField(max_length=100)
         specialization = models.CharField(max_length=100)
+        image = models.ImageField(upload_to='doctors/', null=True, blank=True) 
+        desc = models.TextField(max_length=100)
+
 
         def __str__(self):
-            return f"{self.user.username} - {self.specialization}"
-
+           return self.name
+    
 class Patient(models.Model):
     name = models.CharField(max_length=100)
     age = models.IntegerField()
@@ -53,6 +45,7 @@ class MedicalRecord(models.Model):
     doctor_notes = models.TextField(blank=True, null=True)
     visit_date = models.DateField(default=timezone.now)
     doctors = models.ManyToManyField(Doctor, related_name='medical_records')
+    images = models.ImageField(upload_to='medical_records/', null=True, blank=True)
     # def __str__(self):
     #     return f"{self.patient.name} - {self.visit_date}"
     
@@ -63,8 +56,7 @@ class Appointment(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=15)
     date = models.DateTimeField()
-    department = models.CharField(max_length=100,choices=DEPARTMENTS)
-    doctor = models.CharField(max_length=100, choices=DOCTORS)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     message = models.TextField(blank=True)
 
     def __str__(self):

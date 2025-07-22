@@ -24,12 +24,13 @@ class PatientForm(forms.ModelForm):
 class MedicalRecordForm(forms.ModelForm):
     class Meta:
         model = MedicalRecord
-        fields = ['patient', 'diagnosis', 'prescription', 'doctor_notes', 'visit_date', 'doctors']
+        fields = ['patient', 'diagnosis', 'prescription', 'doctor_notes', 'visit_date', 'doctors','images']
         widgets = {
             'visit_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'diagnosis': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'prescription': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
             'doctor_notes': forms.Textarea(attrs={'rows': 3, 'class': 'form-control'}),
+            
         }
 
 

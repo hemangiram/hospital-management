@@ -24,11 +24,12 @@ def home(request):
     departments = Department.objects.all()
     user_Profile = request.user.userprofile
     role = request.user.userprofile.role.name.lower()
+    doctor = Doctor.objects.all()
     if role == 'admin':
-        modules = Module.objects.all()  # Show all modules
+        modules = Module.objects.all()  
     else:
         modules = user_Profile.role.modules.all()
-    print("request:", request.user.userprofile.role.modules)
+    print("request:", request.user.userprofile.role.name)
     print(f"User role: {modules}")
     print(f"User role: {role}")
 
@@ -36,7 +37,8 @@ def home(request):
         'services': services,
         'departments': departments,
         'role': role,
-        'modules': modules 
+        'modules': modules, 
+        'doctor': doctor
     })
 
 
@@ -44,6 +46,7 @@ def home(request):
 def add(request):
     if request.method == 'POST':
         form = PatientForm(request.POST)
+        print("form valid",form)
         if form.is_valid():
             form.save()
             return redirect('detail_patient', patient_id=form.instance.id)   # Redirect after saving
@@ -54,9 +57,11 @@ def add(request):
 
 def add_record(request):
     if request.method == 'POST':
-        form = MedicalRecordForm(request.POST)
+        form = MedicalRecordForm(request.POST, request.FILES)
+        print("post validated",request.POST)
+        print("files validated",request.FILES)
         if form.is_valid():
-            record = form.save()  # Save and get object
+            record = form.save() 
             return redirect('record_detail', record_id=record.id) 
     else:
         form = MedicalRecordForm()

@@ -40,10 +40,10 @@
 
      
    
-        <form method="post" name="{% url 'medical' %}">
+        <form method="post" enctype="multipart/form-data" name="{% url 'medical' %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-success">Save Record</button>
+            {{ form.as_p }}   
+        <button type="submit" class="btn btn-success">Save Record</button>
         </form>
     </div>
 </body>

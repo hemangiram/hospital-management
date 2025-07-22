@@ -135,3 +135,6 @@ LOGIN_URL = '/'
 
 
 WSGI_APPLICATION = 'hospital.wsgi.application'
+import os
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
