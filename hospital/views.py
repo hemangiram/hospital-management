@@ -78,14 +78,6 @@ def book_appointment(request):
 
 
 
-
-
-def login(request):
-  from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib import messages
-from urllib.parse import urlparse
-
 def login(request):
     if request.method == 'POST':
  
