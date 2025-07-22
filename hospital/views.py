@@ -279,41 +279,40 @@ def show_patient(request):
 
 
 
+
 def show_record(request):
     records = MedicalRecord.objects.all()
-    print("records",records)
-    role = request.user.userprofile.role.name.lower() 
-    print(f"Role attached: {role}")  
+    print(" All records:", records)
+    # Default values
+    permissions = None
+    role = getattr(request.user.userprofile.role, 'name', '').lower()
+    print(" Role attached: {role}")
 
- 
     try:
-        print("enter the block")
-        role_obj = Role.objects.filter(name__iexact=role).first()
-        print("role obj",role_obj)
+        if role:
+            role_obj = Role.objects.filter(name__iexact=role).first()
+            print(" Role object found:", role_obj)
 
-        if role_obj:
-            print("Role object found: {role_obj}")
-            permissions = Update.objects.filter(role=role_obj)
-            if permissions.exists():
-                print("Permissions found:", permissions)
-                permissions = permissions.first()
+            if role_obj:
+                permissions_qs = Update.objects.filter(role=role_obj)
+                if permissions_qs.exists():
+                    permissions = permissions_qs.first()
+                    print("Permissions found:", permissions)
+                else:
+                    print(" No permissions found for this role.")
             else:
-                print("No permissions found for this role.")
-              
+                print(" Role '{role}' does not exist in DB.")
         else:
-            print(f"Role '{role}' does not exist.")
-          
+            print("No role found on user profile.")
 
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        permissions = None
+        print("Unexpected error: {e}")
 
     return render(request, 'view_medical.html', {
-        'records':records,
+        'records': records,
         'role': role,
         'permissions': permissions
     })
-    
 
 def edit_patient(request, pk):
     patient = get_object_or_404(Patient, pk=pk)
