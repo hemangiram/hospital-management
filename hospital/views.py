@@ -22,11 +22,12 @@ from patient.forms import PatientForm
 def home(request):
     services = Service.objects.all()
     departments = Department.objects.all()
+    user_Profile = request.user.userprofile
     role = request.user.userprofile.role.name.lower()
     if role == 'admin':
         modules = Module.objects.all()  # Show all modules
     else:
-        modules = request.user.userprofile.role.modules.all()
+        modules = user_Profile.role.modules.all()
     print("request:", request.user.userprofile.role.modules)
     print(f"User role: {modules}")
     print(f"User role: {role}")
@@ -243,89 +244,41 @@ def detail_patient(request, patient_id):
     form = PatientForm(instance=patient)
     return render(request, 'detail_patient.html', {'patient': patient, 'form': form})
 
+def get_role_and_permissions(user):
+    role = getattr(user.userprofile.role, 'name', '').lower()
+    role_obj = Role.objects.filter(name__iexact=role).first()
+    permissions = Update.objects.filter(role=role_obj).first() if role_obj else None
+    return role, permissions
+
+# Patient Views
+
 def show_patient(request):
     patients = Patient.objects.all()
-    role = request.user.userprofile.role.name.lower()  # Ensure clean role value
-    print(f"Role attached: {role}")  # Debugging the role value
-
-    # Query the Role model
-    try:
-        print("enter the block")
-        role_obj = Role.objects.filter(name__iexact=role).first()
-        print("role obj",role_obj)
-
-        if role_obj:
-            print("Role object found: {role_obj}")
-            permissions = Update.objects.filter(role=role_obj)
-            if permissions.exists():
-                print("Permissions found:", permissions)
-                permissions = permissions.first()
-            else:
-                print("No permissions found for this role.")
-                permissions = None
-        else:
-            print(f"Role '{role}' does not exist.")
-            permissions = None
-
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        permissions = None
-
-    return render(request, 'show_patient.html', {
+    role, permissions = get_role_and_permissions(request.user)
+    return render(request, "show_patient.html", {
         'patients': patients,
         'role': role,
         'permissions': permissions
     })
 
-
-
-
-def show_record(request):
-    records = MedicalRecord.objects.all()
-    print(" All records:", records)
-    # Default values
-    permissions = None
-    role = getattr(request.user.userprofile.role, 'name', '').lower()
-    print(" Role attached: {role}")
-
-    try:
-        if role:
-            role_obj = Role.objects.filter(name__iexact=role).first()
-            print(" Role object found:", role_obj)
-
-            if role_obj:
-                permissions_qs = Update.objects.filter(role=role_obj)
-                if permissions_qs.exists():
-                    permissions = permissions_qs.first()
-                    print("Permissions found:", permissions)
-                else:
-                    print(" No permissions found for this role.")
-            else:
-                print(" Role '{role}' does not exist in DB.")
-        else:
-            print("No role found on user profile.")
-
-    except Exception as e:
-        print("Unexpected error: {e}")
-
-    return render(request, 'view_medical.html', {
-        'records': records,
-        'role': role,
-        'permissions': permissions
-    })
-
 def edit_patient(request, pk):
+    role, permissions = get_role_and_permissions(request.user)
+    if not (permissions and permissions.edit_report):
+        return HttpResponse("You do not have permission to edit patients.")
     patient = get_object_or_404(Patient, pk=pk)
     if request.method == 'POST':
         form = PatientForm(request.POST, instance=patient)
         if form.is_valid():
             form.save()
-            return redirect('show_patient') 
+            return redirect('show_patient')
     else:
         form = PatientForm(instance=patient)
     return render(request, 'edit_patient.html', {'form': form})
 
 def delete_patient(request, pk):
+    role, permissions = get_role_and_permissions(request.user)
+    if not (permissions and permissions.delete_report):
+        return HttpResponse("You do not have permission to delete patients.")
     patient = get_object_or_404(Patient, pk=pk)
     if request.method == 'POST':
         patient.delete()
@@ -333,5 +286,52 @@ def delete_patient(request, pk):
     return render(request, 'delete_patient.html', {'patient': patient})
 
 def view_patient(request, pk):
+    patients = Patient.objects.all()
+    role, permissions = get_role_and_permissions(request.user)
+    if not (permissions and permissions.view_report):
+        return HttpResponse("You do not have permission to view patients.")
     patient = get_object_or_404(Patient, pk=pk)
-    return render(request, 'view_patient.html', {'patient': patient})
+    return render(request, 'show_patient.html', {'patient': patient,'patients':patients})
+
+
+
+def show_record(request):
+    records = MedicalRecord.objects.all()
+    role, permissions = get_role_and_permissions(request.user)
+    return render(request, 'view_medical.html', {
+        'records': records,
+        'role': role,
+        'permissions': permissions
+    })
+
+def view_medical_record(request, pk):
+    records = MedicalRecord.objects.all()
+    role, permissions = get_role_and_permissions(request.user)
+    if not (permissions and permissions.view_report):
+        return HttpResponse("You do not have permission to view records.")
+    record = get_object_or_404(MedicalRecord, pk=pk)
+    return render(request, 'view_medical.html', {'record': record,'records':records})
+
+def edit_medical_record(request, pk):
+    role, permissions = get_role_and_permissions(request.user)
+    if not (permissions and permissions.edit_report):
+        return HttpResponse("You do not have permission to edit records.")
+    record = get_object_or_404(MedicalRecord, pk=pk)
+    if request.method == 'POST':
+        form = MedicalRecordForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('show_record')
+    else:
+        form = MedicalRecordForm(instance=record)
+    return render(request, 'medical.html', {'form': form})
+
+def delete_medical_record(request, pk):
+    role, permissions = get_role_and_permissions(request.user)
+    if not (permissions and permissions.delete_report):
+        return HttpResponse("You do not have permission to delete records.")
+    record = get_object_or_404(MedicalRecord, pk=pk)
+    if request.method == 'POST':
+        record.delete()
+        return redirect('show_record')
+    return render(request, 'record_del.html', {'record': record})

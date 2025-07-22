@@ -80,13 +80,13 @@
                         <td>
                             {% if permissions %}
                                 {% if permissions.view_report %}
-                                    <a href="{% url 'view_patient' pk=record.patient.pk %}">View</a>
+                                   <a href="{% url 'view_record' record.pk %}">View</a>
                                 {% endif %}
                                 {% if permissions.edit_report %}
-                                    <a href="{% url 'edit_patient' pk=record.patient.pk %}">Edit</a>
+                                    <a href="{% url 'edit_record' record.pk %}">Edit</a>
                                 {% endif %}
                                 {% if permissions.delete_report %}
-                                    <a href="{% url 'delete_patient' pk=record.patient.pk %}">Delete</a>
+                                    <a href="{% url 'delete_record' record.pk %}">Delete</a>
                                 {% endif %}
                             {% else %}
                                 <!-- Optional: You could just hide the action column when permissions aren't available -->

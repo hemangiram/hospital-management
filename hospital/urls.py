@@ -42,10 +42,10 @@ urlpatterns = [
     path('patients/<int:pk>/edit/', edit_patient, name='edit_patient'),
     path('patients/<int:pk>/delete/', delete_patient, name='delete_patient'),
     path('patients/<int:pk>/', view_patient, name='view_patient'),
-    path('patients/<int:pk>/edit/', edit_patient, name='edit'),
-    path('patients/<int:pk>/delete/', delete_patient, name='delete'),
-    path('patients/<int:pk>/', view_patient, name='view'),
-
+    path('records/<int:pk>/', view_medical_record, name='view_record'), 
+    path('records/<int:pk>/edit/', edit_medical_record, name='edit_record'), 
+    path('records/<int:pk>/delete/', delete_medical_record, name='delete_record'),  
+   
 
 
 
