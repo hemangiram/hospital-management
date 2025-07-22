@@ -1,0 +1,7 @@
+{% if user_role == 'doctor' %}
+  <h2>Doctor Dashboard</h2>
+  <p>Show doctor-only features here</p>
+{% elif user_role == 'nurse' %}
+  <h2>Nurse Dashboard</h2>
+  <p>Show nurse-only features here</p>
+{% endif %}

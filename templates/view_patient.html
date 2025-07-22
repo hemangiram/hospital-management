@@ -1,0 +1,10 @@
+<h2>Patient Details</h2>
+<p><strong>Name:</strong> {{ patient.name }}</p>
+<p><strong>Age:</strong> {{ patient.age }}</p>
+<p><strong>Gender:</strong> {{ patient.gender }}</p>
+<p><strong>Phone:</strong> {{ patient.phone }}</p>
+<p><strong>Address:</strong> {{ patient.address }}</p>
+<a href="{% url 'show_patient' %}">Back to Details</a>
+
+  {% if permissions %}
+                      

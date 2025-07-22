@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Medical Record</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- Custom CSS -->
+    <style>
+        /* Inline custom styles (optional if you don’t want a separate CSS file) */
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .record-form {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        button.btn-success {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="container mt-5">
+    <div class="record-form">
+        <h2 class="mb-4">Add Medical Record</h2>
+
+     
+   
+        <form method="post" name="{% url 'medical' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Save Record</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Billing</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .billing-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .billing-header {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="billing-box">
+        <div class="billing-header">
+            <h3>Patient Billing</h3>
+            <p>Handled by: <strong>{{ user.username }}</strong> ({{ role }})</p>
+        </div></br>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="patientName" class="form-label">Patient Name</label>
+                <input type="text" class="form-control" id="patientName" name="patient_name" required>
+            </div></br>
+            <div class="mb-3">
+                <label for="service" class="form-label">Service Provided</label>
+                <input type="text" class="form-control" id="service" name="service" required>
+            </div></br>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Total Amount (₹)</label>
+                <input type="number" class="form-control" id="amount" name="amount" required>
+            </div></br>
+            <button type="submit" class="btn btn-success">Generate Bill</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

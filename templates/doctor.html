@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <meta charset="UTF-8">
+    <title>Doctor Dashboard</title>
+   
+<style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .dashboard-card {
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+            transition: 0.3s ease-in-out;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .header {
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-center header">
+            <h1>Welcome, Dr. {{ request.user.first_name }}</h1>
+            <p class="lead">This is your dashboard. You can manage patients, appointments, and view records.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card p-4 text-center">
+                    <h4>Patients</h4>
+                    <p>View or update patient details</p>
+                    <a href="{% url 'show_patient' %}" class="btn btn-outline-primary btn-sm">View Patients</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card p-4 text-center">
+                    <h4>Appointments</h4>
+                    <p>Check and manage appointments</p>
+                    <a href="{% url 'appoiment' %}" class="btn btn-outline-success btn-sm">View Appointments</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card dashboard-card p-4 text-center">
+                    <h4>Medical Records</h4>
+                    <p>Access or update medical history</p>
+                    <a href="{% url 'medical' %}" class="btn btn-outline-warning btn-sm">View Records</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

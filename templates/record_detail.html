@@ -1,0 +1,8 @@
+<h2>Medical Record Detail</h2>
+<p><strong>Patient:</strong> {{ record.patient.name }}</p>
+<p><strong>Diagnosis:</strong> {{ record.diagnosis }}</p>
+<p><strong>Prescription:</strong> {{ record.prescription }}</p>
+<p><strong>Doctor Notes:</strong> {{ record.doctor_notes }}</p>
+<p><strong>Visit Date:</strong> {{ record.visit_date }}</p>
+<p><strong>Doctors:</strong>{{ record.doctors.all|join:", " }}</p>
+

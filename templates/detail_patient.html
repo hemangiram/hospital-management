@@ -1,0 +1,9 @@
+<h2>patient Detail</h2>
+<p><strong>Patient name:</strong> {{ patient.name }}</p>
+<p><strong>Age:</strong> {{ patient.age }}</p>
+<p><strong>Gender:</strong> {{ patient.gender }}</p>
+<p><strong>Email:</strong> {{ patient.email }}</p>
+<p><strong>Phone:</strong> {{ patient.phone }}</p>
+<p><strong>Address:</strong> {{ patient.address }}</p>
+<p><strong>Doctors:</strong>{{ patient.doctors.all|join:", " }}</p>
+

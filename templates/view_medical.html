@@ -1,0 +1,104 @@
+<!-- view_medical_records.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        .record-list {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .add-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .add-btn:hover {
+            background-color: #218838;
+            transition: background-color 0.3s ease;
+        }       
+    </style>    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Medical Records</title>
+    <link rel="stylesheet" href="styles.css">
+     <a href="{% url 'medical' %}" class="add-btn">Add medical report</a>
+</head>
+<body class="container mt-5">
+    <div class="record-list">
+        <h2 class="mb-4">Medical Records</h2>
+
+     
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Diagnosis</th>
+                    <th>Prescription</th>
+                    <th>Visit Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.patient.name }}</td>
+                    <td>{{ record.diagnosis }}</td>
+                    <td>{{ record.prescription }}</td>
+                    <td>{{ record.visit_date }}</td>
+
+                    {% if permissions %}
+                      {% if permissions.view_report %}
+                          <a href="{% url 'view_patient' pk=patient.pk %}">View </a>
+                            {% endif %}
+                         {% if permissions.edit_report %}
+                          <a href="{% url 'edit_patient' pk=patient.pk %}">Edit </a>
+                            {% endif %}
+                            {% if permissions.delete_report %}
+                           <a href="{% url 'delete_patient' pk=patient.pk %}">Delete </a>
+                           {% endif %}
+                            {% else %}
+                          <p>No permissions found for this role.</p>
+                            {% endif %}
+      
+                                
+                            {% endfor %}
+                
+            </tbody>
+        </table>
+       
+    </div>
+</body>
+</html>

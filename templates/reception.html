@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receptionist Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        .dashboard {
+            margin-top: 40px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        .card-title {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container dashboard">
+        <div class="text-center mb-4">
+            <h2>Welcome, Receptionist {{ request.user.first_name }}</h2>
+            <p class="text-muted">Manage appointments, patients, and check-ins</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center bg-light">
+                    <h5 class="card-title">Appointments</h5>
+                    <p>View and manage appointment bookings</p>
+                    <a href="{% url 'appoiment' %}" class="btn btn-primary btn-sm">Manage Appointments</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center bg-light">
+                    <h5 class="card-title">Patients</h5>
+                    <p>Register and update patient information</p>
+                    <a href="{% url 'show_patient' %}" class="btn btn-success btn-sm">Manage Patients</a>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card p-3 text-center bg-light">
+                    <h5 class="card-title">Billing</h5>
+                    <p>Handle invoices and billing records</p>
+                    <a href="{% url 'billing' %}" class="btn btn-warning btn-sm">Go to Billing</a>
+                </div>
+
+    <h2>Welcome, {{ role }}</h2>
+
+      <h3>Modules Assigned:</h3>
+       <ul>
+        {% for module in modules %}
+      <li>{{ module.name }}</li>
+      {% empty %}
+       <li>No modules assigned.</li>
+        {% endfor %}
+               </ul>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
